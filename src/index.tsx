@@ -4,22 +4,40 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom"
-import { AuthContextProvider } from './context/AuthContext';
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import enTranslation from './locales/en.json';
+import lvTranslation from './locales/lv.json';
+import LanguageDetector from 'i18next-browser-languagedetector'
+
+i18n
+.use(initReactI18next)
+.use(LanguageDetector)
+.init({
+  resources: {
+    en: {
+      translation: enTranslation
+    },
+    fr: {
+      translation: lvTranslation
+    }
+  },
+  lng: 'en', // Default language
+  fallbackLng: 'en', // Fallback language
+  interpolation: {
+    escapeValue: false // React already escapes the output
+  }
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-      <AuthContextProvider>
           <BrowserRouter>
               <App />
           </BrowserRouter>
-      </AuthContextProvider>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

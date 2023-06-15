@@ -1,4 +1,3 @@
-import React from 'react';
 import { MdOutlineDangerous } from 'react-icons/md';
 
 export const GeneralErrorMsg = ({ message }: GeneralErrorMsgProps) => {

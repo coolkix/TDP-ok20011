@@ -5,7 +5,7 @@ export const NavLink: React.FC<NavLinkProps> = (props) => {
         <li>
             <a
                 href={props.href || '#'}
-                className="text-gray-700 hover:text-black transition duration-200 font-medium"
+                className="text-white"
             >
                 {props.title}
             </a>

@@ -1,46 +1,39 @@
 import { Route, Routes } from "react-router-dom"
-import React, { useContext } from 'react';
 import './App.css';
 import { Home } from './screens/Home';
-import { MakeWishlist } from './screens/MakeWishlist';
-import { Wishlists } from './screens/Wishlists';
-import { Wishlist } from './screens/Wishlist';
-import { About } from './screens/About';
-import { AddWish } from './screens/AddWish';
-import { ProtectedRoute } from './components/ProtectedRoute';
-import { AuthContext, AuthContextType } from './context/AuthContext';
-import { EditWish } from "./screens/EditWish";
+import { Kursi } from "./screens/Kursi";
+import { CelsLidzIzvelei } from "./screens/celsLidzIzvelei";
+import { CelsUzLu } from "./screens/celsUzLuDf";
+import { KursiGrut } from "./screens/kursiGrut";
+import { KursiInteresanti } from "./screens/kursiInteresanti";
+import { KursiNoder } from "./screens/kursiNoder";
+import { MacibuMateriali } from "./screens/macibuMateriali";
+import { I18nextProvider } from "react-i18next";
+import i18n from './i18n';
+import { useState } from "react";
 
 function App() {
 
-    const { isAuthenticated, isLoading, user } = useContext(AuthContext) as AuthContextType;
+    const [currentLanguage, setCurrentLanguage] = useState('lv');
+
+    const handleLanguageChange = (language: string) => {
+        setCurrentLanguage(language);
+      };
 
     return (
-        <Routes>
+        <I18nextProvider i18n={i18n}>
+          <Routes>
             <Route path="/" element={<Home />} />
-            <Route
-                path="wishlist/create"
-                element={
-                    <ProtectedRoute user={user} isAuthenticated={isAuthenticated} isLoading={isLoading}>
-                        <MakeWishlist />
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="wishlists"
-                element={
-                    <ProtectedRoute user={user} isAuthenticated={isAuthenticated} isLoading={isLoading}>
-                        <Wishlists />
-                    </ProtectedRoute>
-                }
-            />
-            <Route path="about" element={<About />}/>
-            <Route path="wishlist/:hash" element={<Wishlist />} />
-            <Route path="wishlist/:hash/add" element={<AddWish />} />
-            <Route path="wishlist/:hash/edit/:id" element={<EditWish />} />
+            <Route path="/celsLidzIzvelei" element={<CelsLidzIzvelei />} />
+            <Route path="/celsUzLu" element={<CelsUzLu />} />
+            <Route path="/Kursi" element={<Kursi />} />
+            <Route path="/kursiGrutakie" element={<KursiGrut />} />
+            <Route path="/KursiInteresanti" element={<KursiInteresanti />} />
+            <Route path="/kursiNoderigakie" element={<KursiNoder />} />
+            <Route path="/macibuMateriali" element={<MacibuMateriali />} />
             <Route path="*" element={<div>404</div>} />
-        </Routes>
+          </Routes>
+        </I18nextProvider>
   );
 }
-
 export default App;

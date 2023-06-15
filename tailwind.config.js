@@ -8,12 +8,8 @@ module.exports = {
       fontFamily: {
         montserrat: ["Montserrat", "sans-serif"],
       },
-      animation: {
-        'spin-slow': 'spin 4s linear infinite',
-      },
       height: {
-        'wishlist-item': '132px',
-        'about': '450px',
+        'about': '700px',
       },
       width: {
         'about': '420px',
@@ -31,6 +27,12 @@ module.exports = {
       },
       colors: {
         'success': '#4BB543',
+        'df':'#1B5089',
+        'unFocused':'#318787',
+        'focused':'#316D6D',
+        'complementary': '#D2891B',
+        'monochromeUnfocused': '#2C2C2C',
+        'monochromeFocused': '#121212',
       }
     },
   },

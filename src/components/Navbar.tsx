@@ -1,61 +1,105 @@
-import { BsFillGiftFill } from 'react-icons/bs';
-import React, { useContext, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink } from './NavLink';
-import { AuthModal } from './modals/AuthModal/AuthModal';
-import { AuthContext, AuthContextType } from '../context/AuthContext';
-import { AccountNavDropdown } from './dropdowns/AccountNavDropdown';
+import { LanguageSelector } from './LanguageSelector';
+import { useTranslation } from 'react-i18next';
+import lvData from '../locales/lv.json';
+import enData from '../locales/en.json';
 
 export const Navbar = () => {
-    const [isAuthOpen, setIsAuthOpen] = useState(false);
-    const [authTab, setAuthTab] = useState(1);
-    const { isAuthenticated, isLoading, user, getAuthStatus } = useContext(AuthContext) as AuthContextType;
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { i18n } = useTranslation();
+  const [languageData, setLanguageData] = useState(lvData);
+  const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
 
-    const openAuthModal = (tab: number) => {
-        setIsAuthOpen(true);
-        setAuthTab(tab);
+  useEffect(() => {
+    const storedLanguage = localStorage.getItem('language');
+    const currentLanguage = storedLanguage || i18n.language;
+    setCurrentLanguage(currentLanguage);
+    if (currentLanguage === 'en') {
+      setLanguageData(enData);
+    } else {
+      setLanguageData(lvData);
     }
+  }, []);
 
-    return (
-        <nav className="w-full p-4 shadow bg-white">
-            <div className="container mx-auto px-20 flex justify-between items-center">
-                <div className="flex flex-row items-center gap-x-2">
-                    <div className="bg-gradient-to-r from-sky-400 to-sky-600 rounded-full p-3">
-                        <BsFillGiftFill className="text-2xl text-white" />
-                    </div>
-                    <p className="font-bold text-xl">WishBox</p>
-                </div>
-                <div>
-                    <ul className="flex items-center gap-x-8">
-                        <NavLink title="Home" href="/" />
-                        <NavLink title="My Wishlists" href="/wishlists" />
-                        <NavLink title="Create a wishlist" href="/wishlist/create" />
-                        <NavLink title="About" href="/about" />
-                    </ul>
-                </div>
-                <div className="gap-x-4 flex">
-                    {!isAuthenticated && !isLoading ? (
-                        <>
-                            <button
-                                onClick={() => openAuthModal(1)}
-                                className="text-white px-4 py-1.5 rounded-sm border-sky-500 text-sky-500 border font-medium"
-                            >
-                                Log in
-                            </button>
-                            <button
-                                onClick={() => openAuthModal(2)}
-                                className="text-white px-4 py-1.5 rounded-sm bg-sky-500"
-                            >
-                                Sign up
-                            </button>
-                        </>
-                    ) :
-                    (
-                        <AccountNavDropdown user={user} getAuthStatus={getAuthStatus} />
-                    )
-                    }
-                </div>
-            </div>
-            <AuthModal isOpen={isAuthOpen} setIsOpen={setIsAuthOpen} tab={authTab} setTab={setAuthTab} />
-        </nav>
-    );
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleLanguageChange = (language: string) => {
+    if (currentLanguage !== language) {
+      i18n.changeLanguage(language).then(() => {
+        setCurrentLanguage(language);
+        if (language === 'en') {
+          setLanguageData(enData);
+        } else {
+          setLanguageData(lvData);
+        }
+        localStorage.setItem('language', language); // Save language selection in local storage
+      });
+    }
+  };
+
+  return (
+    <nav className="w-full p-4 shadow bg-df">
+      <div className="mx-auto flex justify-between items-center">
+        <div className="flex items-center">
+          <button
+            className="block lg:hidden mr-4 focus:outline-none"
+            onClick={toggleMobileMenu}
+          >
+            <svg
+              className="w-6 h-6 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {isMobileMenuOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
+            </svg>
+          </button>
+
+          <ul
+            className={`${
+              isMobileMenuOpen ? 'block' : 'hidden'
+            } lg:flex justify-center items-center gap-x-4`}
+          >
+            <li className="hover:bg-focused rounded-xl px-4 py-2 transition duration-200 font-medium text-base">
+              <NavLink title={languageData.navbar1} href="/" />
+            </li>
+            <li className="hover:bg-focused rounded-xl px-4 py-2 transition duration-200 font-medium text-base">
+              <NavLink title={languageData.navbar2} href="/celsLidzIzvelei" />
+            </li>
+            <li className="hover:bg-focused rounded-xl px-4 py-2 transition duration-200 font-medium text-base">
+              <NavLink title={languageData.navbar3} href="/celsUzLu" />
+            </li>
+            <li className="hover:bg-focused rounded-xl px-4 py-2 transition duration-200 font-medium text-base">
+              <NavLink title={languageData.navbar4} href="/kursi" />
+            </li>
+            <li className="hover:bg-focused rounded-xl px-4 py-2 transition duration-200 font-medium text-base">
+              <NavLink title={languageData.navbar5} href="/macibuMateriali" />
+            </li>
+          </ul>
+        </div>
+        <LanguageSelector
+          currentLanguage={currentLanguage} // Pass currentLanguage instead of i18n.language
+          onLanguageChange={handleLanguageChange}
+        />
+      </div>
+    </nav>
+  );
 };

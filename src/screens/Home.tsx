@@ -1,66 +1,83 @@
-import React from 'react';
-import { AiFillStar } from 'react-icons/ai';
-import { HiOutlineLightBulb, HiOutlineViewGridAdd, HiOutlineShare } from 'react-icons/hi';
-import { MdOutlineCreate } from 'react-icons/md';
-import { ReactComponent as OnlineWish } from '../assets/vectors/online-wish.svg';
-import { WishStep } from '../components/WishStep';
-import { Page } from "./Page";
+import { useState, useEffect } from 'react';
+import { LuStep } from '../components/luStep';
+import { Page } from './Page';
+import { Link } from 'react-router-dom';
+import lvData from '../locales/lv.json';
+import enData from '../locales/en.json';
+import { useTranslation } from 'react-i18next';
+import homeImage from "../assets/images/home/roadToLuDf.jpg";
 
 export const Home = () => {
-    return (
-        <Page>
-            <div className="container mx-auto px-20">
-                <div className="py-24">
-                    <div className="grid grid-cols-2 gap-8">
-                        <div className="flex flex-col justify-center px-10">
-                            <h1 className="text-5xl font-bold text-gray-800 leading-tight">
-                                Think of a wish and share it!
-                            </h1>
-                            <hr className="w-10/12 h-1 bg-gradient-to-r from-sky-400 to-sky-600 my-4 rounded" />
-                            <p className="text-gray-600 text-lg font-medium">
-                                Make a wishlist and share it with your friends and family. They can contribute to your wishlist and make your wishes come true.
-                            </p>
-                            <div className="flex mt-8">
-                                <button className="text-white px-8 py-2.5 rounded bg-sky-500 hover:bg-sky-600 transition font-semibold text-lg">Get started</button>
-                            </div>
-                        </div>
-                        <div className="flex flex-col justify-center">
-                            <div className="relative">
-                                <OnlineWish className="h-80 w-full" />
-                                <AiFillStar className="absolute text-5xl text-yellow-400 -top-2 left-28 animate-spin-slow" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  const { i18n } = useTranslation();
+  const [languageData, setLanguageData] = useState(enData); // Default language data is set to English
+
+  useEffect(() => {
+    const storedLanguage = localStorage.getItem('language');
+    const selectedLanguage = storedLanguage || i18n.language;
+    if (selectedLanguage === 'en') {
+      setLanguageData(enData);
+    } else {
+      setLanguageData(lvData);
+    }
+  }, [i18n.language]);
+
+  useEffect(() => {
+    // Force re-render when languageData changes
+  }, [languageData]);
+
+  return (
+    <Page>
+      <div className="container mx-auto px-6 mt-24">
+        <div className="py-12">
+          <div className="grid grid-cols-2 gap-8">
+            <div className="col-span-2 sm:col-span-1 flex flex-col justify-center">
+              <h1 className="cursor-default text-3xl sm:text-4xl font-bold text-gray-800 leading-tight text-center">
+                {languageData.greeting}
+              </h1>
+              <hr className="h-1 bg-df from-sky-400 to-sky-600 my-4 rounded" />
+              <p className="cursor-default text-gray-600 text-base sm:text-lg font-medium text-center">
+                {languageData.description}
+              </p>
+              <div className="flex mt-4 justify-center">
+                <Link to="/celsLidzIzvelei">
+                  <button className="text-white px-4 py-2 rounded bg-unFocused hover:bg-focused transition font-semibold text-base sm:text-lg">
+                    {languageData.buttonText}
+                  </button>
+                </Link>
+              </div>
             </div>
-            <div className="bg-gray-50">
-                <div className="container mx-auto px-28">
-                    <div className="py-24">
-                        <div className="grid grid-cols-4 gap-8">
-                            <WishStep
-                                title="Make a wish"
-                                description="Think of an item you have always wanted to have."
-                                wishIconElement={<HiOutlineLightBulb className="text-5xl text-sky-700" />}
-                            />
-                            <WishStep
-                                title="Create a wishlist"
-                                description="Create a new wishlist or use an existing one."
-                                wishIconElement={<MdOutlineCreate className="text-5xl text-sky-700" />}
-                            />
-                            <WishStep
-                                title="Add your wish"
-                                description="Add your wish to the wishlist."
-                                wishIconElement={<HiOutlineViewGridAdd className="text-5xl text-sky-700" />}
-                            />
-                            <WishStep
-                                title="Share your wishlist"
-                                description="Finally, share your wishlist with your friends and family."
-                                wishIconElement={<HiOutlineShare className="text-5xl text-sky-700" />}
-                            />
-                        </div>
-                    </div>
-                </div>
+            <div className="col-span-2 sm:col-span-1 flex flex-col justify-center">
+              <div className="relative">
+                <img src={homeImage} alt="resursi" className="mx-auto" />
+              </div>
             </div>
-        </Page>
-    );
+          </div>
+        </div>
+      </div>
+      <div>
+        <div className="container mx-auto px-6 mt-8">
+          <div className="py-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 cursor-default">
+              <LuStep
+                title={languageData.step1Title}
+                description={languageData.step1Description}
+              />
+              <LuStep
+                title={languageData.step2Title}
+                description={languageData.step2Description}
+              />
+              <LuStep
+                title={languageData.step3Title}
+                description={languageData.step3Description}
+              />
+              <LuStep
+                title={languageData.step4Title}
+                description={languageData.step4Description}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </Page>
+  );
 };

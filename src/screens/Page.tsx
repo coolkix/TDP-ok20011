@@ -6,7 +6,7 @@ export const Page = ({ children }: PageProps) => {
     return (
         <div className="min-h-screen font-montserrat flex flex-col">
             <Navbar />
-            {children}
+                {children}
             <Footer />
         </div>
     );
@@ -14,4 +14,5 @@ export const Page = ({ children }: PageProps) => {
 
 interface PageProps {
     children: React.ReactNode;
+    
 }
